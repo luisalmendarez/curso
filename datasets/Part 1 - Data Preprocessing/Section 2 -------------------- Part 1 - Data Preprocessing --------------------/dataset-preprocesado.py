@@ -14,6 +14,8 @@ import pandas as pd
 
 # Importar el dataset a Spyder
 dataset = pd.read_csv('Data.csv') # Definir la ubicación del archivo
+# Sistema de coordenadas en Python [:, 3] 
+# primera parte definir las filas '[:,' y después de la coma  ':3]' definir las columnas
 X = dataset.iloc[:, :-1].values # agregar variables independientes
 y = dataset.iloc[:, 3].values # agregar variables dependientes (a predecir)
 
@@ -29,16 +31,14 @@ X[:, 1:3] = imputer.transform(X[:,1:3])
 # Codificar los datos categóricos (conversión de valores alfanúmericos a númericos)
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from sklearn.compose import ColumnTransformer
-
+## Proceso de codificación de a variables dummy
+## Proceso para variable X
 labelencoder_X = LabelEncoder()
 X[:, 0] = labelencoder_X.fit_transform(X[:, 0])
-## Proceso de codificación de a variables dummy
-ct = ColumnTransformer(
-    [('one_hot_encoder', OneHotEncoder(categories='auto'), [0])],   
-    remainder='passthrough'                        
-)
-
+ct = ColumnTransformer([('one_hot_encoder', OneHotEncoder(categories='auto'), [0])],remainder='passthrough')
 X = np.array(ct.fit_transform(X), dtype=np.float)
+
+## Proceso para variable Y
 labelencoder_y = LabelEncoder()
 y = labelencoder_y.fit_transform(y)
 
